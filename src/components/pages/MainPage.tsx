@@ -1,5 +1,5 @@
 import { FC, MouseEvent, useContext, useEffect, useState } from 'react';
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Context } from '../../context/context';
 import { BoardCell } from '../boardCell/BoardCell';
 import { RoomModal } from '../roomModal/RoomModal';
@@ -15,7 +15,7 @@ const MainPage: FC<MainPageProps> = ({ socket }) => {
   const [board, setBoard] = useState<string[]>(initialBoardState);
   const [player, setPlayer] = useState<string>('X');
   const [turn, setTurn] = useState<string>('X');
-  const { room } = useContext(Context);
+  const { user, room } = useContext(Context);
 
   useEffect(() => {
     socket.on('updateGame', (id) => {
@@ -50,9 +50,16 @@ const MainPage: FC<MainPageProps> = ({ socket }) => {
   };
 
   return (
-    <>
-      <div>{result.result}</div>
-      <div>{result.winner}</div>
+    <Stack spacing={2} direction="column" alignItems="center">
+      <Typography variant="h6" sx={{ color: '#2475c5', textAlign: 'center' }}>
+        {result.result}
+      </Typography>
+      <Typography variant="h6" sx={{ color: '#2475c5', textAlign: 'center' }}>
+        {result.winner}
+      </Typography>
+      <Typography variant="h4" sx={{ color: '#2475c5', textAlign: 'center' }}>
+        {user}
+      </Typography>
       <RoomModal />
       <Stack sx={boardStyles}>
         {boardCells.map((cell, index) => (
@@ -64,7 +71,7 @@ const MainPage: FC<MainPageProps> = ({ socket }) => {
           />
         ))}
       </Stack>
-    </>
+    </Stack>
   );
 };
 

@@ -4,12 +4,4 @@ const boardStyles = {
   gap: 1,
 };
 
-const boardCellStyles = {
-  width: '100px',
-  height: '100px',
-  backgroundColor: '#eeeeee',
-  display: 'grid',
-  placeContent: 'center',
-};
-
-export { boardStyles, boardCellStyles };
+export { boardStyles };

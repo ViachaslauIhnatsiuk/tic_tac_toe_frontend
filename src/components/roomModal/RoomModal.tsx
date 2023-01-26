@@ -27,6 +27,7 @@ const RoomModal: FC = () => {
         <DialogContent sx={{ mt: 2 }}>
           <TextField
             autoFocus
+            autoComplete="off"
             size="small"
             label="Room number"
             fullWidth

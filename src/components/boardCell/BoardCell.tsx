@@ -1,11 +1,13 @@
-import { FC } from 'react';
+import { FC, MouseEventHandler } from 'react';
 import { Box } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import CircleIcon from '@mui/icons-material/Circle';
 
-const BoardCell: FC<{ handleClick: any; id: string; value: string }> = ({
-  handleClick,
-  id,
-  value,
-}) => {
+const BoardCell: FC<{
+  handleClick: MouseEventHandler<HTMLElement>;
+  id: string;
+  value: string;
+}> = ({ handleClick, id, value }) => {
   return (
     <Box
       id={id}
@@ -18,7 +20,11 @@ const BoardCell: FC<{ handleClick: any; id: string; value: string }> = ({
         placeContent: 'center',
       }}
     >
-      {value}
+      {!value ? null : value === 'X' ? (
+        <CloseIcon fontSize="large" />
+      ) : (
+        <CircleIcon fontSize="large" />
+      )}
     </Box>
   );
 };

@@ -31,6 +31,7 @@ const WelcomePage: FC = () => {
         }}
       >
         <TextField
+          autoComplete="off"
           fullWidth
           label="Name"
           size="small"

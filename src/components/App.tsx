@@ -4,18 +4,17 @@ import { Container } from '@mui/material';
 import { WelcomePage } from './pages/WelcomePage';
 import { MainPage } from './pages/MainPage';
 import { Context } from '../context/context';
-import { io, Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-const newSocket = io('http://localhost:4000');
+const socket = io('http://localhost:4000');
 
 const App: FC = () => {
   const [user, setUser] = useState<string>('');
-  const [room, setRoom] = useState<string>('');
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [room, setRoom] = useState<string | null>(null);
 
   useEffect(() => {
     if (room) {
-      newSocket.emit('join', room);
+      socket.emit('join', room);
     }
   }, [room]);
 
@@ -23,11 +22,9 @@ const App: FC = () => {
     <Container
       maxWidth="md"
       sx={{
-        position: 'relative',
         height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        display: 'grid',
+        placeContent: 'center',
       }}
     >
       <BrowserRouter>
@@ -35,15 +32,16 @@ const App: FC = () => {
           value={{
             user,
             room,
-            socket,
             setUser,
             setRoom,
-            setSocket,
           }}
         >
           <Routes>
             <Route path="/welcome" element={<WelcomePage />} />
-            <Route path="/" element={user ? <MainPage /> : <Navigate to="/welcome" />} />
+            <Route
+              path="/"
+              element={user ? <MainPage socket={socket} /> : <Navigate to="/welcome" />}
+            />
           </Routes>
         </Context.Provider>
       </BrowserRouter>

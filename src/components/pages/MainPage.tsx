@@ -1,32 +1,49 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, MouseEvent, useContext, useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import { Context } from '../../context/context';
 import { BoardCell } from '../boardCell/BoardCell';
 import { RoomModal } from '../roomModal/RoomModal';
+import { Socket } from 'socket.io-client';
+import { cells } from '../../constants/cells';
 
-const MainPage: FC = () => {
+const MainPage: FC<{ socket: Socket }> = ({ socket }) => {
   const [board, setBoard] = useState(['', '', '', '', '', '', '', '', '']);
   const [canPlay, setCanPlay] = useState(true);
-  const { socket, room } = useContext(Context);
-
-  const cells = ['0', '1', '2', '3', '4', '5', '6', '7', '8'];
+  const [currentPlayer, setCurrentPlayer] = useState('X');
+  const { room } = useContext(Context);
 
   useEffect(() => {
-    socket?.on('updateGame', (id) => {
-      setBoard((data) => ({ ...data, [id]: 'O' }));
+    socket.on('updateGame', (id) => {
+      const updatedBoard = board.map((cell, index) => {
+        if (index === Number(id)) {
+          return (cell = currentPlayer === 'O' ? 'X' : 'O');
+        }
+        return cell;
+      });
+      setBoard(updatedBoard);
+
+      setCurrentPlayer(currentPlayer === 'O' ? 'X' : 'O');
       setCanPlay(true);
     });
 
     return () => {
-      socket?.off('updateGame');
+      socket.off('updateGame');
     };
   });
 
-  const handleClick = (event: Event) => {
+  const handleClick = (event: MouseEvent<HTMLElement, globalThis.MouseEvent>): void => {
     const id = (event.currentTarget as HTMLElement).id;
     if (canPlay && board[Number(id)] === '') {
-      setBoard((data) => ({ ...data, [id]: 'X' }));
-      socket?.emit('play', { id, room });
+      const updatedBoard = board.map((cell, index) => {
+        if (index === Number(id)) {
+          return (cell = currentPlayer === 'O' ? 'X' : 'O');
+        }
+        return cell;
+      });
+      setBoard(updatedBoard);
+      setCurrentPlayer(currentPlayer === 'O' ? 'X' : 'O');
+
+      socket.emit('play', { id, room });
       setCanPlay(false);
     }
 

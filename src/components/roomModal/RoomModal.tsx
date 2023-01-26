@@ -13,7 +13,12 @@ const RoomModal: FC = () => {
 
   return (
     <div>
-      <Button color="success" variant="contained" onClick={() => setOpen(true)}>
+      <Button
+        variant="contained"
+        color="success"
+        size="small"
+        onClick={() => setOpen(true)}
+      >
         Enter room number
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -27,10 +32,10 @@ const RoomModal: FC = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" size="small" color="error" onClick={handleClose}>
+          <Button variant="contained" color="error" size="small" onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant="contained" size="small" color="success" onClick={handleClose}>
+          <Button variant="contained" color="success" size="small" onClick={handleClose}>
             Ok
           </Button>
         </DialogActions>

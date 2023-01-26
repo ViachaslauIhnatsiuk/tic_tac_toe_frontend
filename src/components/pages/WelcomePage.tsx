@@ -1,16 +1,12 @@
-import { FC, FormEvent, useState } from 'react';
+import { FC, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Context } from '../../context/context';
+import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 
 const WelcomePage: FC = () => {
-  const [user, setUser] = useState<string>('');
+  const { user, setUser } = useContext(Context);
   const navigate = useNavigate();
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-    navigate('/');
-  };
 
   return (
     <Stack spacing={2} direction="column" alignItems="center">
@@ -23,35 +19,34 @@ const WelcomePage: FC = () => {
       <Typography variant="h6" sx={{ color: blue[500] }}>
         Please enter a name to continue
       </Typography>
-      <Paper sx={{ px: 3, py: 5, backgroundColor: '#12161f' }}>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          sx={{
-            width: '300px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
+      <Paper
+        sx={{
+          px: 3,
+          py: 5,
+          width: '300px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 3,
+        }}
+      >
+        <TextField
+          fullWidth
+          label="Name"
+          size="small"
+          value={user}
+          onChange={(e) => setUser(e.target.value)}
+        />
+        <Button
+          type="button"
+          fullWidth
+          color="success"
+          variant="contained"
+          disabled={!user}
+          onClick={() => navigate('/')}
         >
-          <TextField
-            fullWidth
-            label="Name"
-            value={user}
-            onChange={(e) => setUser(e.target.value)}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            color="success"
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            disabled={!user}
-          >
-            Continue
-          </Button>
-        </Box>
+          Continue
+        </Button>
       </Paper>
     </Stack>
   );

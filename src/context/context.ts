@@ -4,10 +4,10 @@ import { IContext } from '../models/contextModel';
 
 const Context = createContext<IContext>({
   user: '',
-  room: 0,
+  room: '',
   socket: null,
   setUser: () => '',
-  setRoom: () => null,
+  setRoom: () => '',
   setSocket: () => null,
 });
 

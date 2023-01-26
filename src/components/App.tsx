@@ -10,7 +10,7 @@ const newSocket = io('http://localhost:4000');
 
 const App: FC = () => {
   const [user, setUser] = useState<string>('');
-  const [room, setRoom] = useState<number | null>(null);
+  const [room, setRoom] = useState<string>('');
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const App: FC = () => {
         >
           <Routes>
             <Route path="/welcome" element={<WelcomePage />} />
-            <Route path="/" element={!user ? <MainPage /> : <Navigate to="/welcome" />} />
+            <Route path="/" element={user ? <MainPage /> : <Navigate to="/welcome" />} />
           </Routes>
         </Context.Provider>
       </BrowserRouter>

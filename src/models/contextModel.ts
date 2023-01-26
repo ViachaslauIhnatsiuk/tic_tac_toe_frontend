@@ -3,10 +3,10 @@ import { Dispatch, SetStateAction } from 'react';
 
 interface IContext {
   user: string;
-  room: number | null;
+  room: string;
   socket: Socket | null;
   setUser: Dispatch<SetStateAction<string>>;
-  setRoom: Dispatch<SetStateAction<number | null>>;
+  setRoom: Dispatch<SetStateAction<string>>;
   setSocket: Dispatch<SetStateAction<Socket | null>>;
 }
 

@@ -3,27 +3,24 @@ import { Stack } from '@mui/material';
 import { Context } from '../../context/context';
 import { BoardCell } from '../boardCell/BoardCell';
 import { RoomModal } from '../roomModal/RoomModal';
-import { Socket } from 'socket.io-client';
-import { cells } from '../../constants/cells';
+import { boardCells, initialBoardState } from '../../constants/board';
+import { boardStyles } from '../../constants/elementStyles';
+import { getUpdatedBoard } from '../../helpers/getUpdatedBoard';
+import { MainPageProps } from '../../models/mainPageProps';
 
-const MainPage: FC<{ socket: Socket }> = ({ socket }) => {
-  const [board, setBoard] = useState(['', '', '', '', '', '', '', '', '']);
-  const [canPlay, setCanPlay] = useState(true);
-  const [currentPlayer, setCurrentPlayer] = useState('X');
+const MainPage: FC<MainPageProps> = ({ socket }) => {
+  const [board, setBoard] = useState<string[]>(initialBoardState);
+  const [player, setPlayer] = useState<string>('X');
+  const [turn, setTurn] = useState<string>('X');
   const { room } = useContext(Context);
 
   useEffect(() => {
     socket.on('updateGame', (id) => {
-      const updatedBoard = board.map((cell, index) => {
-        if (index === Number(id)) {
-          return (cell = currentPlayer === 'O' ? 'X' : 'O');
-        }
-        return cell;
-      });
-      setBoard(updatedBoard);
+      const updatedBoard = getUpdatedBoard(board, player, id);
 
-      setCurrentPlayer(currentPlayer === 'O' ? 'X' : 'O');
-      setCanPlay(true);
+      setBoard(updatedBoard);
+      setPlayer(player === 'O' ? 'X' : 'O');
+      setTurn(player === 'O' ? 'X' : 'O');
     });
 
     return () => {
@@ -32,40 +29,30 @@ const MainPage: FC<{ socket: Socket }> = ({ socket }) => {
   });
 
   const handleClick = (event: MouseEvent<HTMLElement, globalThis.MouseEvent>): void => {
-    const id = (event.currentTarget as HTMLElement).id;
-    if (canPlay && board[Number(id)] === '') {
-      const updatedBoard = board.map((cell, index) => {
-        if (index === Number(id)) {
-          return (cell = currentPlayer === 'O' ? 'X' : 'O');
-        }
-        return cell;
-      });
+    const { id } = event.currentTarget as HTMLElement;
+
+    if (player === turn && board[Number(id)] === '') {
+      const updatedBoard = getUpdatedBoard(board, player, id);
+
       setBoard(updatedBoard);
-      setCurrentPlayer(currentPlayer === 'O' ? 'X' : 'O');
+      setPlayer(player === 'O' ? 'X' : 'O');
 
       socket.emit('play', { id, room });
-      setCanPlay(false);
     }
 
     if (
       (board[0] == 'X' && board[1] == 'X' && board[2] == 'X') ||
       (board[0] == 'O' && board[1] == 'O' && board[2] == 'O')
     ) {
-      setBoard(['', '', '', '', '', '', '', '', '']);
+      setBoard(initialBoardState);
     }
   };
 
   return (
     <>
       <RoomModal />
-      <Stack
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 1,
-        }}
-      >
-        {cells.map((cell, index) => (
+      <Stack sx={boardStyles}>
+        {boardCells.map((cell, index) => (
           <BoardCell
             key={index}
             handleClick={handleClick}

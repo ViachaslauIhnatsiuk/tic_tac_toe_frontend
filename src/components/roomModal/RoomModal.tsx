@@ -1,14 +1,16 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useRef, useState } from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { Context } from '../../context/context';
 
 const RoomModal: FC = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const { room, setRoom } = useContext(Context);
+  const { setRoom } = useContext(Context);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClose = (): void => {
+    const inputValue = (inputRef.current as HTMLInputElement).value;
+    setRoom(inputValue);
     setOpen(false);
-    setRoom(room);
   };
 
   return (
@@ -28,15 +30,20 @@ const RoomModal: FC = () => {
             size="small"
             label="Room number"
             fullWidth
-            onChange={(e) => setRoom(e.target.value)}
+            inputRef={inputRef}
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="error" size="small" onClick={handleClose}>
+          <Button
+            variant="contained"
+            color="error"
+            size="small"
+            onClick={() => setOpen(false)}
+          >
             Cancel
           </Button>
           <Button variant="contained" color="success" size="small" onClick={handleClose}>
-            Ok
+            Join the game
           </Button>
         </DialogActions>
       </Dialog>

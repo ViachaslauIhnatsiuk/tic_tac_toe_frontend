@@ -6,9 +6,12 @@ import { RoomModal } from '../roomModal/RoomModal';
 import { boardCells, initialBoardState } from '../../constants/board';
 import { boardStyles } from '../../constants/elementStyles';
 import { getUpdatedBoard } from '../../helpers/getUpdatedBoard';
+import { isDraw, isWinnerExists } from '../../helpers/getGameResult';
 import { MainPageProps } from '../../models/mainPageProps';
+import { IResult } from '../../models/resultModel';
 
 const MainPage: FC<MainPageProps> = ({ socket }) => {
+  const [result, setResult] = useState<IResult>({ winner: 'none', result: 'none' });
   const [board, setBoard] = useState<string[]>(initialBoardState);
   const [player, setPlayer] = useState<string>('X');
   const [turn, setTurn] = useState<string>('X');
@@ -28,6 +31,11 @@ const MainPage: FC<MainPageProps> = ({ socket }) => {
     };
   });
 
+  useEffect(() => {
+    isDraw(board, setResult);
+    isWinnerExists(board, setResult);
+  }, [board]);
+
   const handleClick = (event: MouseEvent<HTMLElement, globalThis.MouseEvent>): void => {
     const { id } = event.currentTarget as HTMLElement;
 
@@ -39,17 +47,12 @@ const MainPage: FC<MainPageProps> = ({ socket }) => {
 
       socket.emit('play', { id, room });
     }
-
-    if (
-      (board[0] == 'X' && board[1] == 'X' && board[2] == 'X') ||
-      (board[0] == 'O' && board[1] == 'O' && board[2] == 'O')
-    ) {
-      setBoard(initialBoardState);
-    }
   };
 
   return (
     <>
+      <div>{result.result}</div>
+      <div>{result.winner}</div>
       <RoomModal />
       <Stack sx={boardStyles}>
         {boardCells.map((cell, index) => (

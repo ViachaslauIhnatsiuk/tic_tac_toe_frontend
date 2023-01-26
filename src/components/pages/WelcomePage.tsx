@@ -9,7 +9,7 @@ const WelcomePage: FC = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    navigate('/main');
+    navigate('/');
   };
 
   return (

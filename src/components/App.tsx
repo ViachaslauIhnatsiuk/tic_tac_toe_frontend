@@ -43,7 +43,7 @@ const App: FC = () => {
         >
           <Routes>
             <Route path="/welcome" element={<WelcomePage />} />
-            <Route path="/" element={user ? <MainPage /> : <Navigate to="/welcome" />} />
+            <Route path="/" element={!user ? <MainPage /> : <Navigate to="/welcome" />} />
           </Routes>
         </Context.Provider>
       </BrowserRouter>

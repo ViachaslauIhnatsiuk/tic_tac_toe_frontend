@@ -46,7 +46,13 @@ const WelcomePage: FC = () => {
         <Button
           type="button"
           fullWidth
-          sx={{ backgroundColor: '#2475c5' }}
+          sx={{
+            backgroundColor: '#2475c5',
+            '&.Mui-disabled': {
+              border: '1px solid #adadad',
+              color: '#adadad',
+            },
+          }}
           variant="contained"
           disabled={!user}
           onClick={() => navigate('/')}

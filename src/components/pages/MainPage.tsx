@@ -3,6 +3,7 @@ import { Stack, Typography } from '@mui/material';
 import { Context } from '../../context/context';
 import { RoomModal } from '../roomModal/RoomModal';
 import { Board } from '../board/Board';
+import { Replay } from '../buttons/Replay';
 
 const MainPage: FC = () => {
   const { user, result } = useContext(Context);
@@ -20,6 +21,7 @@ const MainPage: FC = () => {
       </Typography>
       <RoomModal />
       <Board />
+      <Replay />
     </Stack>
   );
 };

@@ -1,10 +1,11 @@
 import { FC, useContext, useRef, useState } from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { Context } from '../../context/context';
+import { initialBoardState } from '../../constants/board';
 
 const RoomModal: FC = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const { setRoom, setIsBoardBlocked } = useContext(Context);
+  const { board, isBoardBlocked, setRoom, setIsBoardBlocked } = useContext(Context);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClose = (): void => {
@@ -15,11 +16,23 @@ const RoomModal: FC = () => {
   };
 
   return (
-    <div>
+    <>
       <Button
+        fullWidth
         variant="contained"
         color="success"
         size="small"
+        disabled={!isBoardBlocked || board !== initialBoardState}
+        sx={{
+          backgroundColor: '#00a682',
+          ':hover': {
+            backgroundColor: '#018c6e',
+          },
+          '&.Mui-disabled': {
+            border: '1px solid #adadad',
+            color: '#adadad',
+          },
+        }}
         onClick={() => setOpen(true)}
       >
         Enter room number
@@ -49,7 +62,7 @@ const RoomModal: FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 

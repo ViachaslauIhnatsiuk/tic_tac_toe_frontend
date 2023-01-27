@@ -11,6 +11,7 @@ const socket = io('http://localhost:4000');
 const App: FC = () => {
   const [user, setUser] = useState<string>('');
   const [room, setRoom] = useState<string | null>(null);
+  const [isBoardBlocked, setIsBoardBlocked] = useState<boolean>(true);
 
   useEffect(() => {
     if (room) {
@@ -32,8 +33,10 @@ const App: FC = () => {
           value={{
             user,
             room,
+            isBoardBlocked,
             setUser,
             setRoom,
+            setIsBoardBlocked,
           }}
         >
           <Routes>

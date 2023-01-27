@@ -4,13 +4,14 @@ import { Context } from '../../context/context';
 
 const RoomModal: FC = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const { setRoom } = useContext(Context);
+  const { setRoom, setIsBoardBlocked } = useContext(Context);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleClose = (): void => {
     const inputValue = (inputRef.current as HTMLInputElement).value;
     setRoom(inputValue);
     setOpen(false);
+    setIsBoardBlocked(false);
   };
 
   return (
@@ -23,7 +24,7 @@ const RoomModal: FC = () => {
       >
         Enter room number
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogContent sx={{ mt: 2 }}>
           <TextField
             autoFocus

@@ -15,7 +15,7 @@ const MainPage: FC<MainPageProps> = ({ socket }) => {
   const [board, setBoard] = useState<string[]>(initialBoardState);
   const [player, setPlayer] = useState<string>('X');
   const [turn, setTurn] = useState<string>('X');
-  const { user, room } = useContext(Context);
+  const { user, room, isBoardBlocked, setIsBoardBlocked } = useContext(Context);
 
   useEffect(() => {
     socket.on('updateGame', (id) => {
@@ -32,8 +32,8 @@ const MainPage: FC<MainPageProps> = ({ socket }) => {
   });
 
   useEffect(() => {
-    isDraw(board, setResult);
-    isWinnerExists(board, setResult);
+    isDraw(board, setResult, setIsBoardBlocked);
+    isWinnerExists(board, setResult, setIsBoardBlocked);
   }, [board]);
 
   const handleClick = (event: MouseEvent<HTMLElement, globalThis.MouseEvent>): void => {
@@ -52,16 +52,22 @@ const MainPage: FC<MainPageProps> = ({ socket }) => {
   return (
     <Stack spacing={2} direction="column" alignItems="center">
       <Typography variant="h6" sx={{ color: '#2475c5', textAlign: 'center' }}>
-        {result.result}
+        Result: {result.result}
       </Typography>
       <Typography variant="h6" sx={{ color: '#2475c5', textAlign: 'center' }}>
-        {result.winner}
+        Winner: {result.winner}
       </Typography>
       <Typography variant="h4" sx={{ color: '#2475c5', textAlign: 'center' }}>
         {user}
       </Typography>
       <RoomModal />
-      <Stack sx={boardStyles}>
+      <Stack
+        sx={{
+          ...boardStyles,
+          pointerEvents: isBoardBlocked ? 'none' : 'auto',
+          backgroundColor: isBoardBlocked ? '#12161f' : 'transparent',
+        }}
+      >
         {boardCells.map((cell, index) => (
           <BoardCell
             key={index}

@@ -15,6 +15,7 @@ const winningCases: number[][] = [
 const isWinnerExists = (
   board: string[],
   setResult: Dispatch<SetStateAction<IResult>>,
+  setIsBoardBlocked: Dispatch<SetStateAction<boolean>>,
 ): void => {
   for (const winCase of winningCases) {
     if (
@@ -23,15 +24,21 @@ const isWinnerExists = (
       board[winCase[0]] !== ''
     ) {
       setResult({ winner: board[winCase[0]], result: 'won' });
+      setIsBoardBlocked(true);
     }
   }
 };
 
-const isDraw = (board: string[], setResult: Dispatch<SetStateAction<IResult>>): void => {
+const isDraw = (
+  board: string[],
+  setResult: Dispatch<SetStateAction<IResult>>,
+  setIsBoardBlocked: Dispatch<SetStateAction<boolean>>,
+): void => {
   const nonEmptySells = board.filter((cell) => cell !== '');
 
   if (nonEmptySells.length === 9) {
     setResult({ winner: 'none', result: 'draw' });
+    setIsBoardBlocked(true);
   }
 };
 

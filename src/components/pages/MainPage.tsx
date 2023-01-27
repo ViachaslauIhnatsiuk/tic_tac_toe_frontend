@@ -3,23 +3,28 @@ import { Stack, Typography } from '@mui/material';
 import { Context } from '../../context/context';
 import { BoardCell } from '../boardCell/BoardCell';
 import { RoomModal } from '../roomModal/RoomModal';
-import { boardCells, initialBoardState } from '../../constants/board';
+import { boardCells } from '../../constants/board';
 import { boardStyles } from '../../constants/elementStyles';
-import { getUpdatedBoard } from '../../helpers/getUpdatedBoard';
-import { isDraw, isWinnerExists } from '../../helpers/getGameResult';
 import { MainPageProps } from '../../models/mainPageProps';
-import { IResult } from '../../models/resultModel';
+import { useGame } from '../../hooks/useGame';
 
 const MainPage: FC<MainPageProps> = ({ socket }) => {
-  const [result, setResult] = useState<IResult>({ winner: 'none', result: 'none' });
-  const [board, setBoard] = useState<string[]>(initialBoardState);
-  const [player, setPlayer] = useState<string>('X');
   const [turn, setTurn] = useState<string>('X');
-  const { user, room, isBoardBlocked, setIsBoardBlocked } = useContext(Context);
+  const { user, room, isBoardBlocked } = useContext(Context);
+  const {
+    board,
+    player,
+    result,
+    getUpdatedBoard,
+    isWinnerExists,
+    isDraw,
+    setBoard,
+    setPlayer,
+  } = useGame();
 
   useEffect(() => {
     socket.on('updateGame', (id) => {
-      const updatedBoard = getUpdatedBoard(board, player, id);
+      const updatedBoard = getUpdatedBoard(id);
 
       setBoard(updatedBoard);
       setPlayer(player === 'O' ? 'X' : 'O');
@@ -32,15 +37,15 @@ const MainPage: FC<MainPageProps> = ({ socket }) => {
   });
 
   useEffect(() => {
-    isDraw(board, setResult, setIsBoardBlocked);
-    isWinnerExists(board, setResult, setIsBoardBlocked);
+    isDraw();
+    isWinnerExists();
   }, [board]);
 
   const handleClick = (event: MouseEvent<HTMLElement, globalThis.MouseEvent>): void => {
     const { id } = event.currentTarget as HTMLElement;
 
     if (player === turn && board[Number(id)] === '') {
-      const updatedBoard = getUpdatedBoard(board, player, id);
+      const updatedBoard = getUpdatedBoard(id);
 
       setBoard(updatedBoard);
       setPlayer(player === 'O' ? 'X' : 'O');

@@ -24,6 +24,7 @@ const RoomModal: FC = () => {
         size="small"
         disabled={!isBoardBlocked || board !== initialBoardState}
         sx={{
+          mb: 2,
           backgroundColor: '#00a682',
           ':hover': {
             backgroundColor: '#018c6e',
@@ -37,8 +38,17 @@ const RoomModal: FC = () => {
       >
         Enter room number
       </Button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogContent sx={{ mt: 2 }}>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        sx={{
+          '& .MuiPaper-root': {
+            backgroundColor: '#212835',
+            px: 2,
+          },
+        }}
+      >
+        <DialogContent>
           <TextField
             autoFocus
             autoComplete="off"
@@ -46,18 +56,42 @@ const RoomModal: FC = () => {
             label="Room number"
             fullWidth
             inputRef={inputRef}
+            sx={{
+              mt: 2,
+              input: {
+                color: '#adadad',
+              },
+              '& .MuiFormLabel-root': {
+                color: '#adadad',
+              },
+            }}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ mb: 2 }}>
           <Button
             variant="contained"
-            color="error"
+            sx={{
+              backgroundColor: '#e45651',
+              '&:hover': {
+                backgroundColor: '#c45441',
+              },
+            }}
             size="small"
             onClick={() => setOpen(false)}
           >
             Cancel
           </Button>
-          <Button variant="contained" color="success" size="small" onClick={handleClose}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: '#00a682',
+              ':hover': {
+                backgroundColor: '#018c6e',
+              },
+            }}
+            size="small"
+            onClick={handleClose}
+          >
             Join the game
           </Button>
         </DialogActions>

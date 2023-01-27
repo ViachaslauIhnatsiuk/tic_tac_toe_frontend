@@ -34,7 +34,7 @@ const useGame = () => {
     const nonEmptySells = board.filter((cell) => cell !== '');
 
     if (nonEmptySells.length === 9) {
-      setResult({ winner: 'none', result: 'draw' });
+      setResult({ winner: 'none', result: 'DRAW' });
       setIsBoardBlocked(true);
     }
   };

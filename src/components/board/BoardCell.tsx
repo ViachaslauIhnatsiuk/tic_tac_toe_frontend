@@ -20,6 +20,7 @@ const BoardCell: FC<BoardCellProps> = ({ handleClick, id, value }) => {
         backgroundColor: !value ? 'transparent' : value === 'X' ? '#112439' : '#381e22',
         display: 'grid',
         placeContent: 'center',
+        cursor: 'pointer',
       }}
     >
       {!value ? null : value === 'X' ? (

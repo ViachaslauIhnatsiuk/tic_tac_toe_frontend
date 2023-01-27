@@ -4,6 +4,8 @@ import { Container } from '@mui/material';
 import { WelcomePage } from './pages/WelcomePage';
 import { MainPage } from './pages/MainPage';
 import { Context } from '../context/context';
+import { IResult } from '../models/resultModel';
+import { initialResultState } from '../constants/board';
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:4000');
@@ -11,6 +13,7 @@ const socket = io('http://localhost:4000');
 const App: FC = () => {
   const [user, setUser] = useState<string>('');
   const [room, setRoom] = useState<string | null>(null);
+  const [result, setResult] = useState<IResult>(initialResultState);
   const [isBoardBlocked, setIsBoardBlocked] = useState<boolean>(true);
 
   useEffect(() => {
@@ -31,20 +34,20 @@ const App: FC = () => {
       <BrowserRouter>
         <Context.Provider
           value={{
+            socket,
             user,
             room,
+            result,
             isBoardBlocked,
             setUser,
             setRoom,
+            setResult,
             setIsBoardBlocked,
           }}
         >
           <Routes>
             <Route path="/welcome" element={<WelcomePage />} />
-            <Route
-              path="/"
-              element={user ? <MainPage socket={socket} /> : <Navigate to="/welcome" />}
-            />
+            <Route path="/" element={user ? <MainPage /> : <Navigate to="/welcome" />} />
           </Routes>
         </Context.Provider>
       </BrowserRouter>

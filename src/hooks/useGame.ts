@@ -2,13 +2,12 @@ import { useState, useContext } from 'react';
 import { initialBoardState } from '../constants/board';
 import { winningCases } from '../constants/winningCases';
 import { Context } from '../context/context';
-import { IResult } from '../models/resultModel';
 
 const useGame = () => {
-  const [result, setResult] = useState<IResult>({ winner: 'none', result: 'none' });
   const [board, setBoard] = useState<string[]>(initialBoardState);
   const [player, setPlayer] = useState<string>('X');
-  const { setIsBoardBlocked } = useContext(Context);
+  const [turn, setTurn] = useState<string>('X');
+  const { setIsBoardBlocked, setResult } = useContext(Context);
 
   const getUpdatedBoard = (id: number | string): string[] => {
     return board.map((cell, index) => {
@@ -44,12 +43,13 @@ const useGame = () => {
   return {
     board,
     player,
-    result,
+    turn,
     getUpdatedBoard,
     isWinnerExists,
     isDraw,
     setBoard,
     setPlayer,
+    setTurn,
   };
 };
 

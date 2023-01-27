@@ -3,7 +3,6 @@ import { Context } from '../../context/context';
 import { BoardCell } from './BoardCell';
 import { Stack } from '@mui/material';
 import { boardCells } from '../../constants/board';
-import { boardStyles } from '../../constants/elementStyles';
 import { useGame } from '../../hooks/useGame';
 
 const Board: FC = () => {
@@ -55,7 +54,10 @@ const Board: FC = () => {
   return (
     <Stack
       sx={{
-        ...boardStyles,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 1,
+        mb: 2,
         pointerEvents: isBoardBlocked ? 'none' : 'auto',
         backgroundColor: isBoardBlocked ? '#12161f' : 'transparent',
       }}

@@ -24,7 +24,7 @@ const useGame = () => {
         board[winCase[0]] !== '';
 
       if (winningCondition) {
-        setResult({ winner: board[winCase[0]], result: 'won' });
+        setResult({ winner: board[winCase[0]], result: 'WINNER' });
         setIsBoardBlocked(true);
       }
     }
@@ -34,7 +34,7 @@ const useGame = () => {
     const nonEmptySells = board.filter((cell) => cell !== '');
 
     if (nonEmptySells.length === 9) {
-      setResult({ winner: 'none', result: 'DRAW' });
+      setResult({ winner: '', result: 'DRAW' });
       setIsBoardBlocked(true);
     }
   };

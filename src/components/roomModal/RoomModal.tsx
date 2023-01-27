@@ -20,7 +20,6 @@ const RoomModal: FC = () => {
       <Button
         fullWidth
         variant="contained"
-        color="success"
         size="small"
         disabled={!isBoardBlocked || board !== initialBoardState}
         sx={{

@@ -8,7 +8,7 @@ import { IResult } from '../models/resultModel';
 import { initialBoardState, initialResultState } from '../constants/board';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://tictactoebackend-production.up.railway.app');
 
 const App: FC = () => {
   const [user, setUser] = useState<string>('');
